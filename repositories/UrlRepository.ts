@@ -1,6 +1,19 @@
 import { IData } from "../interface/IData";
 
-export const mountUrl = (long: string, newUrl: string, status: number): IData =>
-  status === 200
-    ? { long_url: long, shortened_url: newUrl }
-    : { long_url: long, shortened_url: "URL Inválida" };
+export class URL {
+  private _base_url: string = "https://localhost:3000";
+  private _url: string;
+  private _url_code: string;
+
+  constructor(url: string, code: string) {
+    (this._url = url), (this._url_code = code);
+  }
+
+  public Mount(): IData {
+    return {
+      url: this._url,
+      url_shortened: this._base_url + "/" + this._url_code,
+      url_code: this._url_code,
+    };
+  }
+}

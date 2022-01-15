@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import shortid from "shortid";
 import { Validation } from "../../business/UrlValidation";
-import { mountUrl } from "../../repositories/UrlRepository";
-
-const base_url = "https://localhost:3000";
+import { URL } from "../../repositories/UrlRepository";
+import { UrlService } from "../../services/base/UrlService";
 
 export default async (
   req: NextApiRequest,
@@ -13,9 +12,19 @@ export default async (
 
   if (req.method === "POST") {
     const isValid = new Validation(url);
-    const newUrl = base_url + "/" + shortid.generate();
-    isValid.isValidHttpUrl()
-      ? res.status(200).json(mountUrl(url, newUrl, 200))
-      : res.status(200).json(mountUrl(url, newUrl, 400));
+    const url_code = shortid.generate();
+    if (isValid.isValidHttpUrl()) {
+      const instance_service = new UrlService();
+      if (await instance_service.find(url)) {
+        // logic
+        // return the url saved in the database
+      } else {
+        const instance_url = new URL(url, url_code);
+        instance_service.insert(instance_url.Mount());
+        res.status(200).json({ url_shortened: instance_url.Mount() });
+      }
+    } else {
+      res.status(200).json({ url_shortened: "Invalid URL" });
+    }
   }
 };

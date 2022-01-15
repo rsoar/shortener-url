@@ -1,4 +1,5 @@
 export interface IData {
-  long_url: string;
-  shortened_url: string;
+  url: string;
+  url_shortened: string;
+  url_code: string;
 }
