@@ -20,8 +20,8 @@ export default async (
         // return the url saved in the database
       } else {
         const instance_url = new URL(url, url_code);
-        instance_service.insert(instance_url.Mount());
-        res.status(200).json({ url_shortened: instance_url.Mount() });
+        instance_service.insert(instance_url.mount());
+        res.status(200).json(instance_url.mount());
       }
     } else {
       res.status(200).json({ url_shortened: "Invalid URL" });

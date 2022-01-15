@@ -1,6 +1,7 @@
 import { IData } from "../interface/IData";
+import { IUrlRepository } from "../interface/IUrlRepository";
 
-export class URL {
+export class URL implements IUrlRepository {
   private _base_url: string = "https://localhost:3000";
   private _url: string;
   private _url_code: string;
@@ -9,7 +10,7 @@ export class URL {
     (this._url = url), (this._url_code = code);
   }
 
-  public Mount(): IData {
+  public mount(): IData {
     return {
       url: this._url,
       url_shortened: this._base_url + "/" + this._url_code,
