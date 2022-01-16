@@ -1,9 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import { IData } from "../interface/IData";
 
-export default async (query: string): Promise<AxiosResponse<IData>> => {
-  const response: AxiosResponse<IData> = await axios.post("/api/shortener", {
-    url: query,
+export const getUrl = async (
+  key: string,
+  query: string,
+  path: string
+): Promise<AxiosResponse<IData>> =>
+  axios.post(path, {
+    [key]: query,
   });
-  return response;
-};

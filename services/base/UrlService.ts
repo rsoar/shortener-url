@@ -1,22 +1,23 @@
 import { IData } from "../../interface/IData";
 import { IUrlService } from "../../interface/IUrlService";
 import Mongo from "../../database/mongodb";
+import { IResponse } from "../../interface/IDatabase";
 
 type FindResponse = IData | null;
 
 export class UrlService implements IUrlService {
-  public async insert(data: IData) {
-    const database = new Mongo();
-    const db = await database.connection();
+  public async insert(data: IData): Promise<void> {
+    const database: Mongo = new Mongo();
+    const db: IResponse = await database.connection();
     await db.collection.insertOne(data);
+    return;
   }
 
-  public async find(url: string): Promise<FindResponse> {
-    const database = new Mongo();
-    const db = await database.connection();
-    const teste: IData | null = await db.collection.findOne({
-      url: url,
+  public async find(key: string, value: string): Promise<FindResponse> {
+    const database: Mongo = new Mongo();
+    const db: IResponse = await database.connection();
+    return db.collection.findOne({
+      [key]: value,
     });
-    return teste;
   }
 }

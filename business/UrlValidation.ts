@@ -12,7 +12,6 @@ export class Validation {
     } catch (_) {
       return false;
     }
-
     return url.protocol === "http:" || url.protocol === "https:";
   }
 }

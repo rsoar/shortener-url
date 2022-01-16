@@ -11,17 +11,21 @@ export default async (
   const { url } = req.body;
 
   if (req.method === "POST") {
-    const isValid = new Validation(url);
-    const url_code = shortid.generate();
+    const isValid: Validation = new Validation(url);
+    const url_code: string = shortid.generate();
     if (isValid.isValidHttpUrl()) {
-      const instance_url = new URL(url, url_code);
-      const instance_service = new UrlService();
-      const url_data = await instance_service.find(url);
-      if (url_data) {
-        return res.status(200).json(url_data);
-      } else {
-        instance_service.insert(instance_url.mount());
-        res.status(200).json(instance_url.mount());
+      const instance_url: URL = new URL(url, url_code);
+      const instance_service: UrlService = new UrlService();
+      try {
+        const url_data = await instance_service.find("url", url);
+        if (url_data) {
+          return res.status(200).json(url_data);
+        } else {
+          instance_service.insert(instance_url.mount());
+          return res.status(200).json(instance_url.mount());
+        }
+      } catch (_) {
+        throw new Error("Failed to connect to database");
       }
     } else {
       res.status(200).json({ url_shortened: "Invalid URL" });
