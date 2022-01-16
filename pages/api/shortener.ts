@@ -14,12 +14,12 @@ export default async (
     const isValid = new Validation(url);
     const url_code = shortid.generate();
     if (isValid.isValidHttpUrl()) {
+      const instance_url = new URL(url, url_code);
       const instance_service = new UrlService();
-      if (await instance_service.find(url)) {
-        // logic
-        // return the url saved in the database
+      const url_data = await instance_service.find(url);
+      if (url_data) {
+        return res.status(200).json(url_data);
       } else {
-        const instance_url = new URL(url, url_code);
         instance_service.insert(instance_url.mount());
         res.status(200).json(instance_url.mount());
       }
