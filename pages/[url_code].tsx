@@ -5,13 +5,13 @@ import { IData } from "../interface/IData";
 import { getUrl } from "../services/getUrl";
 
 const Post = () => {
-  const [dataBody, setDataBody] = useState<IData>();
+  const [data, setData] = useState<IData>();
   const router = useRouter();
   const { url_code } = router.query;
 
   const loadData = async () => {
     const res = await getUrl("code", url_code as string, "/api/redirect");
-    setDataBody(res.data);
+    setData(res.data);
   };
 
   useEffect(() => {
@@ -23,12 +23,12 @@ const Post = () => {
   }, [url_code]);
 
   useEffect(() => {
-    if (dataBody?.url) {
-      window.location.href = `${(dataBody as IData).url}`;
+    if (data?.url) {
+      window.location.href = `${(data as IData).url}`;
     }
-  }, [dataBody]);
+  }, [data]);
 
-  return <div>{dataBody === undefined && <p>loading...</p>}</div>;
+  return <div>{data === undefined && <p>loading...</p>}</div>;
 };
 
 export default Post;

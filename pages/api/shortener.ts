@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import shortid from "shortid";
+import URL from "../../business/MountUrl";
 import { Validation } from "../../business/UrlValidation";
-import { URL } from "../../repositories/UrlRepository";
-import { UrlService } from "../../services/base/UrlService";
+import { UrlRepository } from "../../repositories/UrlRepository";
+import { IData } from "../../interface/IData";
 
 export default async (
   req: NextApiRequest,
@@ -14,15 +15,15 @@ export default async (
     const isValid: Validation = new Validation(url);
     const url_code: string = shortid.generate();
     if (isValid.isValidHttpUrl()) {
-      const instance_url: URL = new URL(url, url_code);
-      const instance_service: UrlService = new UrlService();
+      const new_url: URL = new URL(url, url_code);
+      const urlRepository: UrlRepository = new UrlRepository();
       try {
-        const url_data = await instance_service.find("url", url);
+        const url_data: IData | null = await urlRepository.find("url", url);
         if (url_data) {
           return res.status(200).json(url_data);
         } else {
-          instance_service.insert(instance_url.mount());
-          return res.status(200).json(instance_url.mount());
+          urlRepository.insert(new_url.mount());
+          return res.status(200).json(new_url.mount());
         }
       } catch (_) {
         throw new Error("Failed to connect to database");

@@ -1,4 +1,5 @@
 import { Collection, MongoClient } from "mongodb";
+import { IData } from "./IData";
 
 export interface IResponse {
   client: MongoClient;
@@ -6,5 +7,5 @@ export interface IResponse {
 }
 
 export interface IDatabase {
-  connection(): Promise<IResponse>;
+  connection(): Promise<Collection<IData>>;
 }

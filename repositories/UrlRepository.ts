@@ -1,20 +1,21 @@
+import { Collection } from "mongodb";
+import Mongo from "../database/mongodb";
 import { IData } from "../interface/IData";
 import { IUrlRepository } from "../interface/IUrlRepository";
 
-export class URL implements IUrlRepository {
-  private _base_url: string = "https://localhost:3000";
-  private _url: string;
-  private _url_code: string;
+export class UrlRepository implements IUrlRepository {
+  private _db = new Mongo();
 
-  constructor(url: string, code: string) {
-    (this._url = url), (this._url_code = code);
+  public async insert(data: IData): Promise<void> {
+    const db: Collection<IData> = await this._db.connection();
+    await db.insertOne(data);
+    return;
   }
 
-  public mount(): IData {
-    return {
-      url: this._url,
-      url_shortened: this._base_url + "/" + this._url_code,
-      url_code: this._url_code,
-    };
+  public async find(key: string, value: string): Promise<IData | null> {
+    const db: Collection<IData> = await this._db.connection();
+    return db.findOne({
+      [key]: value,
+    });
   }
 }
