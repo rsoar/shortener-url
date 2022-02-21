@@ -1,7 +1,7 @@
 import { IData } from "../interface/IData";
 
 class URL {
-  private _base_url: string = "https://localhost:3000";
+  private _base_url: string = "localhost:3000";
   private _url: string;
   private _url_code: string;
 
